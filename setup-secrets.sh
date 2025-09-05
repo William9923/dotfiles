@@ -23,6 +23,9 @@ substitute_tmpl() {
             return 1
         }
         
+        # Set schema variable for JSON schema escaping
+        export schema="schema"
+        
         # Use envsubst to replace variables
         envsubst < "$tmpl_file" > "$output_file"
         echo "✅ Generated $output_file"
