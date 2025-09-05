@@ -1,59 +1,225 @@
-# Dotfiles
+# 🏠 William's Dotfiles
 
-Personal configuration files for my development environment, managed with GNU Stow.
+<p align="center">
+  <img src="https://img.shields.io/badge/OS-Linux-informational?style=flat-square&logo=linux&logoColor=white" />
+  <img src="https://img.shields.io/badge/Editor-Neovim-57A143?style=flat-square&logo=neovim&logoColor=white" />
+  <img src="https://img.shields.io/badge/Shell-Zsh-89e051?style=flat-square&logo=zsh&logoColor=white" />
+  <img src="https://img.shields.io/badge/Terminal-Kitty-000000?style=flat-square&logo=gnome-terminal&logoColor=white" />
+  <img src="https://img.shields.io/badge/Multiplexer-Tmux-1BB91F?style=flat-square&logo=tmux&logoColor=white" />
+  <img src="https://img.shields.io/badge/Git-Lazygit-F05032?style=flat-square&logo=git&logoColor=white" />
+</p>
 
-## Structure
+<p align="center">
+  <b>My personal development environment configuration, managed with GNU Stow</b>
+</p>
 
-- `.config/`
-  - `nvim/` - Neovim configuration using LazyVim
-  - `github-copilot/` - GitHub Copilot settings
-  - `kitty/` - Kitty terminal configuration
-  - `atuin/` - Shell history search
-- `git/` - Git configuration and Lazygit settings
-- `terminal/` - Terminal-related configurations
-- `tmux/` - Tmux configuration
-- `zsh/` - Zsh shell configuration
+---
 
-## Tools
+## ✨ Table of Contents
 
-- Neovim (IDE)
-- Kitty (Terminal)
-- Tmux (Terminal multiplexer)
-- Zsh (Shell)
-- Atuin (Shell history)
-- Lazygit (Git TUI)
-- GitHub Copilot
+- [🎯 Overview](#-overview)
+- [🛠️ Tools & Applications](#️-tools--applications)
+- [🚀 Quick Start](#-quick-start)
+- [🔒 Security & Secrets](#-security--secrets)
+- [📁 Structure](#-structure)
+- [🎨 Features](#-features)
+- [🤝 Contributing](#-contributing)
 
-## Setup
+## 🎯 Overview
 
-1. Install GNU Stow:
+This repository contains my personal dotfiles and development environment configuration. It's designed to be:
+
+- **🔧 Modular**: Each tool has its own package for selective installation
+- **🔒 Secure**: Secrets are managed with templates and environment variables
+- **🏃 Portable**: Works across different Linux distributions
+- **⚡ Efficient**: Optimized for software development workflows
+
+## 🛠️ Tools & Applications
+
+### 💻 Terminal & Shell
+| Tool | Description | Config Location |
+|------|-------------|-----------------|
+| **Kitty** | GPU-accelerated terminal emulator | `terminal/.config/kitty/` |
+| **Zsh** | Modern shell with Powerlevel10k theme | `zsh/` |
+| **Tmux** | Terminal multiplexer for session management | `tmux/` |
+| **Atuin** | Magical shell history with sync | `terminal/.config/atuin/` |
+
+### ⚙️ Development Tools
+| Tool | Description | Config Location |
+|------|-------------|-----------------|
+| **Neovim** | Modern Vim-based editor with LazyVim | `code/.config/nvim/` |
+| **Lazygit** | Simple terminal UI for git commands | `git/.config/lazygit/` |
+| **GitHub Copilot** | AI-powered code completion | `code/.config/github-copilot/` |
+| **OpenCode** | Advanced development assistant | `code/.config/opencode/` |
+
+### 🎨 Themes & Appearance
+- **Rose Pine** theme for Kitty terminal
+- **Powerlevel10k** for Zsh prompt
+- **LazyVim** setup with modern plugins
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+**Install GNU Stow:**
 ```bash
+# Ubuntu/Debian
+sudo apt-get install stow
+
+# Arch Linux  
+sudo pacman -S stow
+
 # macOS
 brew install stow
-
-# Ubuntu/Debian
-apt-get install stow
-
-# Arch Linux
-pacman -S stow
 ```
 
-2. Clone this repository:
+### Installation
+
+1. **Clone the repository:**
 ```bash
-git clone https://github.com/yourusername/dotfiles.git ~/.dotfiles
-cd ~/.dotfiles
+git clone https://github.com/William9923/dotfiles.git ~/dotfiles
+cd ~/dotfiles
 ```
 
-3. Use Stow to create symlinks:
+2. **Set up secrets (first time only):**
 ```bash
-stow */  # This creates symlinks for all config directories
+# Copy the example file and add your actual secrets
+cp .env.example zsh/.zsh_secrets
+nano zsh/.zsh_secrets  # Add your API keys and tokens
 ```
 
-Or selectively:
+3. **Generate config files from templates:**
 ```bash
-stow nvim    # Only Neovim config
-stow zsh     # Only Zsh config
-stow tmux    # Only Tmux config
+./setup-secrets.sh
 ```
 
-GNU Stow will automatically create symbolic links in your home directory that point to the configuration files in this repository. When you update the configs in this repository, the changes are immediately reflected in your system.
+4. **Apply configurations with Stow:**
+```bash
+# Install everything
+stow code git terminal tmux zsh
+
+# Or install selectively
+stow code      # Neovim, OpenCode, GitHub Copilot
+stow git       # Git and Lazygit configuration  
+stow terminal  # Kitty and Atuin
+stow tmux      # Tmux configuration
+stow zsh       # Zsh shell and Powerlevel10k
+```
+
+5. **Restart your shell:**
+```bash
+exec zsh
+```
+
+## 🔒 Security & Secrets
+
+This dotfiles repository uses a **template-based approach** for handling secrets:
+
+### How it works:
+- **Templates** (`.tmpl` files) are committed to git with `${VARIABLE}` placeholders
+- **Real config files** are generated locally with actual secrets
+- **Secrets file** (`zsh/.zsh_secrets`) is never committed
+
+### Example:
+```json
+// opencode.json.tmpl (committed)
+{
+  "mcp": {
+    "ref-tools": {
+      "url": "https://api.ref.tools/mcp?apiKey=${REF_API_KEY}"
+    }
+  }
+}
+
+// opencode.json (generated locally, gitignored)
+{
+  "mcp": {
+    "ref-tools": {
+      "url": "https://api.ref.tools/mcp?apiKey=your-actual-key"
+    }
+  }
+}
+```
+
+### Managing secrets:
+```bash
+# Edit your secrets
+nano zsh/.zsh_secrets
+
+# Regenerate config files
+./setup-secrets.sh
+
+# Check what will be committed (should be no secrets!)
+git status
+```
+
+## 📁 Structure
+
+```
+dotfiles/
+├── 🔧 code/
+│   └── .config/
+│       ├── nvim/              # Neovim configuration (LazyVim)
+│       ├── opencode/          # OpenCode AI assistant
+│       └── github-copilot/    # GitHub Copilot settings
+├── 📝 git/
+│   ├── .gitconfig             # Git configuration
+│   └── .config/lazygit/       # Lazygit TUI settings
+├── 💻 terminal/
+│   └── .config/
+│       ├── kitty/             # Kitty terminal emulator
+│       └── atuin/             # Shell history search
+├── 🖥️ tmux/
+│   └── .tmux.conf             # Tmux configuration
+├── 🐚 zsh/
+│   ├── .zshrc                 # Zsh configuration
+│   ├── .zshenv                # Zsh environment
+│   ├── .p10k.zsh              # Powerlevel10k config
+│   └── .zsh_secrets           # Secrets (gitignored)
+├── 🔒 .env.example            # Template for secrets
+├── ⚙️ setup-secrets.sh        # Setup script
+└── 📖 README.md               # This file
+```
+
+## 🎨 Features
+
+### 🚀 Shell Features
+- **Smart autocompletion** with zsh-autosuggestions
+- **Fast directory navigation** with zsh-z
+- **Beautiful prompt** with Powerlevel10k
+- **Command history search** with Atuin
+
+### 📝 Editor Features  
+- **LazyVim** - Modern Neovim configuration
+- **LSP support** for multiple languages
+- **Git integration** with LazyGit
+- **AI assistance** with GitHub Copilot and OpenCode
+
+### 🎛️ Terminal Features
+- **GPU acceleration** with Kitty
+- **Session management** with Tmux
+- **Rose Pine theme** for consistent aesthetics
+
+## 🤝 Contributing
+
+Found an issue or want to suggest improvements?
+
+1. **Fork the repository**
+2. **Create a feature branch**: `git checkout -b feature/amazing-feature`
+3. **Make your changes** (remember to test!)
+4. **Commit your changes**: `git commit -m 'Add amazing feature'`
+5. **Push to the branch**: `git push origin feature/amazing-feature`
+6. **Open a Pull Request**
+
+## ❤️ Support
+
+If this dotfiles setup has helped you boost your productivity, please consider:
+- ⭐ **Starring this repository**
+- 🍴 **Forking it** for your own use
+- 📢 **Sharing it** with other developers
+
+---
+
+<p align="center">
+  <i>Happy coding! 🚀</i>
+</p>
