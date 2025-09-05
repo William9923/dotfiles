@@ -1,0 +1,26 @@
+{
+  "$$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "semgrep": {
+      "type": "remote",
+      "url": "https://mcp.semgrep.ai/mcp",
+      "enabled": true
+    },
+    "ref-tools": {
+      "type": "remote",
+      "url": "https://api.ref.tools/mcp?apiKey=${REF_API_KEY}",
+      "enabled": true
+    }
+  },
+  "permission": {
+    "edit": "allow",
+    "bash": "allow",
+    "webfetch": "allow"
+  },
+  "theme": "system",
+  "keybinds": {
+    "input_submit": "enter",
+    "input_newline": "shift+enter,ctrl+j",
+    "input_paste": "ctrl+v,<leader>p"
+  }
+}

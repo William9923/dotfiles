@@ -1,0 +1,14 @@
+# Secrets file (never commit)
+zsh/.zsh_secrets
+
+# Generated files from .tmpl templates (contain real secrets)
+# Auto-generated - do not edit manually
+code/.config/github-copilot/apps.json
+code/.config/opencode/opencode.json
+
+# Other files
+.env
+*.bak
+*.backup
+.DS_Store
+Thumbs.db
