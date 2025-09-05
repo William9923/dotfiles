@@ -85,7 +85,7 @@ cd ~/dotfiles
 ```bash
 # Copy the example file and add your actual secrets
 cp .env.example zsh/.zsh_secrets
-nano zsh/.zsh_secrets  # Add your API keys and tokens
+vi zsh/.zsh_secrets  # Add your API keys and tokens
 ```
 
 3. **Generate config files from templates:**
@@ -181,42 +181,24 @@ dotfiles/
 └── 📖 README.md               # This file
 ```
 
-## 🎨 Features
+## 🎨 Tools
 
-### 🚀 Shell Features
+### 🚀 Shell
 - **Smart autocompletion** with zsh-autosuggestions
 - **Fast directory navigation** with zsh-z
 - **Beautiful prompt** with Powerlevel10k
 - **Command history search** with Atuin
 
-### 📝 Editor Features  
+### 📝 Editor  
 - **LazyVim** - Modern Neovim configuration
 - **LSP support** for multiple languages
 - **Git integration** with LazyGit
 - **AI assistance** with GitHub Copilot and OpenCode
 
-### 🎛️ Terminal Features
+### 🎛️ Terminal
 - **GPU acceleration** with Kitty
 - **Session management** with Tmux
 - **Rose Pine theme** for consistent aesthetics
-
-## 🤝 Contributing
-
-Found an issue or want to suggest improvements?
-
-1. **Fork the repository**
-2. **Create a feature branch**: `git checkout -b feature/amazing-feature`
-3. **Make your changes** (remember to test!)
-4. **Commit your changes**: `git commit -m 'Add amazing feature'`
-5. **Push to the branch**: `git push origin feature/amazing-feature`
-6. **Open a Pull Request**
-
-## ❤️ Support
-
-If this dotfiles setup has helped you boost your productivity, please consider:
-- ⭐ **Starring this repository**
-- 🍴 **Forking it** for your own use
-- 📢 **Sharing it** with other developers
 
 ---
 
