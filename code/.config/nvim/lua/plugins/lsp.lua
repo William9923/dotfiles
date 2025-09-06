@@ -8,6 +8,7 @@ return {
         "shellcheck",
         "shfmt",
         "goimports",
+        "vue-language-server",
       })
     end,
   },
@@ -42,9 +43,6 @@ return {
     opts = {
       inlay_hints = { enabled = true },
       servers = {
-        pyright = {},
-        cssls = {},
-        html = {},
         yamlls = {
           settings = {
             yaml = {
@@ -81,14 +79,24 @@ return {
             Lua = {}, -- will be extended by on_init if no .luarc.json present
           },
         },
-        volar = {
-          init_options = {
-            vue = {
-              hybridMode = true,
+        vtsls = {
+          filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
+          settings = {
+            vtsls = {
+              tsserver = {
+                globalPlugins = {
+                  {
+                    name = "@vue/typescript-plugin",
+                    location = vim.fn.stdpath("data") .. "/mason/packages/vue-language-server/node_modules/@vue/language-server",
+                    languages = { "vue" },
+                    configNamespace = "typescript",
+                  },
+                },
+              },
             },
           },
         },
-        vtsls = {},
+        volar = {},
       },
       gopls = {},
     },
@@ -100,6 +108,9 @@ return {
           if client.name == "gopls" then
             if not client.server_capabilities.semanticTokensProvider then
               local semantic = client.config.capabilities.textDocument.semanticTokens
+              if semantic == nil then -- nil check
+                return
+              end
               client.server_capabilities.semanticTokensProvider = {
                 full = true,
                 legend = {
