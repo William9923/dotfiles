@@ -62,7 +62,6 @@ alias g=git
 alias lg=lazygit
 alias t=tmux
 alias v=nvim
-alias ping=gping
 alias ll="exa -l -g --icons"
 alias lla="ll -a"
 alias zshconfig="nvim ~/.zshrc"
