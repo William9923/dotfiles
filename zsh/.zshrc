@@ -62,6 +62,7 @@ alias g=git
 alias lg=lazygit
 alias t=tmux
 alias v=nvim
+alias op=opencode
 alias ll="exa -l -g --icons"
 alias lla="ll -a"
 alias zshconfig="nvim ~/.zshrc"
@@ -85,3 +86,10 @@ export PATH=/home/william-nobara/.local/bin:$PATH
 
 # opencode
 export PATH=/home/william-nobara/.opencode/bin:$PATH
+
+# bun completions
+[ -s "/home/william-nobara/.bun/_bun" ] && source "/home/william-nobara/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
