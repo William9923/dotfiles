@@ -1,22 +1,90 @@
-# Agent Guidelines
+# DOTFILES KNOWLEDGE BASE
 
-This repository contains dotfiles and configuration for development environments including Neovim, tmux, git, and OpenCode.
+**Generated:** 2026-01-22 | **Commit:** 296b386 | **Branch:** master
 
-## Commands
-- **Setup**: `./setup-secrets.sh` - Generate config files from templates with secrets
-- **Install dotfiles**: `stow code git terminal tmux zsh` - Symlink dotfiles to home directory
-- **Update gitignore**: `./update-gitignore.sh > .gitignore` - Auto-generate gitignore for .tmpl files
+## OVERVIEW
 
-## Code Style
-- **Shell scripts**: Use `set -e`, descriptive variables, proper error handling with exit codes
-- **JSON/Config**: 2 spaces indentation, follow schema requirements (OpenCode uses https://opencode.ai/config.json)
-- **Security**: Never commit secrets - use .tmpl files with env substitution, check .gitignore patterns
-- **Lua (Neovim)**: Follow existing patterns in config/, use vim.opt for options, vim.g for globals
-- **Template files**: Use .tmpl extension with ${VAR} syntax for environment variable substitution
-- **File organization**: Group by purpose (code/, terminal/, git/, etc.), maintain clear directory structure
-- **Documentation**: Include usage examples, security reminders, clear setup instructions
+GNU Stow-managed dotfiles with template-based secret handling. Stack: Neovim (LazyVim), Zsh, Tmux, Kitty.
 
-## Project Structure
-- Templates (.tmpl) are committed, generated files are gitignored
-- Secrets stored in zsh/.zsh_secrets (never committed)
-- Configuration organized by tool type in separate directories
+## STRUCTURE
+
+```
+dotfiles/
+├── code/           # Editor configs (nvim, opencode, copilot)
+├── git/            # Git + lazygit
+├── terminal/       # Kitty + atuin
+├── tmux/           # Tmux multiplexer
+├── zsh/            # Shell + secrets
+├── setup-secrets.sh    # Template processor
+└── update-gitignore.sh # Auto-gitignore generator
+```
+
+## WHERE TO LOOK
+
+| Task | Location | Notes |
+|------|----------|-------|
+| Add nvim plugin | `code/.config/nvim/lua/plugins/` | Return plugin spec table |
+| Change nvim keymap | `code/.config/nvim/lua/config/keymaps.lua` | Use `vim.keymap.set` |
+| Edit nvim options | `code/.config/nvim/lua/config/options.lua` | `vim.opt` for options, `vim.g` for globals |
+| Add secret/API key | `zsh/.zsh_secrets` + create `.tmpl` | Never commit secrets file |
+| Configure opencode | `code/.config/opencode/` | Uses .tmpl for API keys |
+| Add git alias | `git/.gitconfig` | Standard git config |
+
+## COMMANDS
+
+```bash
+# Setup (first time or after adding secrets)
+./setup-secrets.sh
+
+# Install dotfiles (symlink to ~)
+stow code git terminal tmux zsh
+
+# Update gitignore after adding .tmpl files
+./update-gitignore.sh > .gitignore
+```
+
+## CONVENTIONS
+
+### Template System (CRITICAL)
+- `.tmpl` files → committed, contain `${VAR}` placeholders
+- Generated files → gitignored, contain real secrets
+- Secrets source: `zsh/.zsh_secrets`
+- Processor: `envsubst` via `setup-secrets.sh`
+
+### Shell Scripts
+- Always `set -e`
+- Descriptive variables
+- Proper error handling with exit codes
+
+### JSON/Config
+- 2 spaces indentation
+- Follow schema when present (opencode uses `https://opencode.ai/config.json`)
+
+### Lua (Neovim)
+- See `code/.config/nvim/AGENTS.md` for LazyVim-specific patterns
+
+## ANTI-PATTERNS
+
+| Never | Do Instead |
+|-------|------------|
+| Commit `zsh/.zsh_secrets` | Keep in gitignore, use `.env.example` as template |
+| Commit generated files (without `.tmpl`) | Run `update-gitignore.sh` after adding templates |
+| Hardcode API keys in config | Create `.tmpl` with `${VAR}` placeholders |
+| Edit generated files directly | Edit the `.tmpl` source, run `setup-secrets.sh` |
+
+## STOW PACKAGES
+
+| Package | Contents | Symlinks To |
+|---------|----------|-------------|
+| `code` | nvim, opencode, github-copilot | `~/.config/` |
+| `git` | .gitconfig, lazygit | `~/`, `~/.config/lazygit/` |
+| `terminal` | kitty, atuin | `~/.config/` |
+| `tmux` | .tmux.conf | `~/` |
+| `zsh` | .zshrc, .zshenv, .p10k.zsh, .zsh_secrets | `~/` |
+
+## NOTES
+
+- Neovim config is "Snorlax.nvim" - LazyVim-based with custom plugins
+- Tmux integrates with nvim via `nvim-tmux-navigator`
+- Terminal theme: Rose Pine (kitty)
+- Shell theme: Powerlevel10k
