@@ -62,7 +62,6 @@ alias g=git
 alias lg=lazygit
 alias t=tmux
 alias v=nvim
-alias op=opencode
 alias ll="exa -l -g --icons"
 alias lla="ll -a"
 alias zshconfig="nvim ~/.zshrc"
@@ -73,10 +72,10 @@ alias syncnotes="z vimwiki && sh ~/vimwiki/sync.sh"
 
 
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+zsh-defer [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+zsh-defer [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-[[ -s "/home/william-nobara/.gvm/scripts/gvm" ]] && source "/home/william-nobara/.gvm/scripts/gvm"
+zsh-defer [ -s "/home/william-nobara/.gvm/scripts/gvm" ] && source "/home/william-nobara/.gvm/scripts/gvm"
 
 # Following line was automatically added by arttime installer
 export MANPATH=/home/william-nobara/.local/share/man:$MANPATH
@@ -88,8 +87,31 @@ export PATH=/home/william-nobara/.local/bin:$PATH
 export PATH=/home/william-nobara/.opencode/bin:$PATH
 
 # bun completions
-[ -s "/home/william-nobara/.bun/_bun" ] && source "/home/william-nobara/.bun/_bun"
+zsh-defer [ -s "/home/william-nobara/.bun/_bun" ] && source "/home/william-nobara/.bun/_bun"
 
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+
+# opencode - Function to run OpenCode on an available port
+unalias op 2>/dev/null
+op() {
+  local start_port=3000
+  local end_port=3010 # with the assumption that opencode will be run max 10 session
+  local found_port=""
+
+  for port in {$start_port..$end_port}; do
+    if ! lsof -i :$port -stcp:listen -P -n >/dev/null 2>&1; then
+      found_port=$port
+      break
+    fi
+  done
+
+  if [[ -n "$found_port" ]]; then
+    echo "Launching opencode on port $found_port"
+    opencode --port "$found_port" "$@"
+  else
+    echo "No ports available in range 3000-3010. Trying default ..."
+    opencode "$@"
+  fi
+}
