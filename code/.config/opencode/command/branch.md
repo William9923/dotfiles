@@ -1,6 +1,6 @@
 ---
 description: Create a branch from a feature description
-agent: Sisyphus
+agent: orchestrator
 ---
 Create a new git branch with a conventional name derived from your description.
 

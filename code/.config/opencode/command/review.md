@@ -1,7 +1,6 @@
 ---
 description: Review recent changes made againts master or main branch
-agent: build
-model: github-copilot/claude-sonnet-4
+agent: orchestrator
 ---
 
 Please review the changes made in the current branch against main or master branch. 

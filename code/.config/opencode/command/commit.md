@@ -1,6 +1,6 @@
 ---
 description: Create a commit using Conventional Commits format
-agent: Sisyphus
+agent: orchestrator
 ---
 Create a git commit following the Conventional Commits specification (https://www.conventionalcommits.org/en/v1.0.0/).
 

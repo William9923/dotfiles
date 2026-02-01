@@ -1,6 +1,6 @@
 ---
 description: Interactive rebase with safety checks
-agent: Sisyphus
+agent: orchestrator
 ---
 Perform a git rebase operation with safety checks.
 

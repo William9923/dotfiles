@@ -1,3 +1,20 @@
 git:
   pagers:
-    - pager: delta --dark --paging=never
+    - pager: delta --dark --paging=never --line-numbers --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
+    - externalDiffCommand: difft --color=always
+
+gui:
+  spinner:
+    # The frames of the spinner animation.
+    frames:
+      - ⠋
+      - ⠙
+      - ⠹
+      - ⠸
+      - ⠼
+      - ⠴
+      - ⠦
+      - ⠧
+      - ⠇
+      - ⠏
+    rate: 80
