@@ -18,7 +18,7 @@
         "mcps": []
       },
       "librarian": {
-        "model": "opencode/glm-4.7-free",
+        "model": "github-copilot/claude-haiku-4.5",
         "variant": "low",
         "skills": [],
         "mcps": [
@@ -28,13 +28,13 @@
         ]
       },
       "explorer": {
-        "model": "opencode/glm-4.7-free",
+        "model": "github-copilot/claude-haiku-4.5",
         "variant": "low",
         "skills": [],
         "mcps": []
       },
       "designer": {
-        "model": "opencode/glm-4.7-free",
+        "model": "github-copilot/claude-haiku-4.5",
         "variant": "medium",
         "skills": [
           "agent-browser"
@@ -42,7 +42,7 @@
         "mcps": []
       },
       "fixer": {
-        "model": "opencode/glm-4.7-free",
+        "model": "github-copilot/claude-haiku-4.5",
         "variant": "low",
         "skills": [],
         "mcps": []
