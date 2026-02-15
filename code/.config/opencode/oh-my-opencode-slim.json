@@ -1,7 +1,106 @@
 {
-  "preset": "zen-free",
+  "preset": "tier-opencode",
+  "tmux": {
+    "enabled": true,
+    "layout": "main-vertical",
+    "main_pane_size": 60
+  },
   "presets": {
-    "zen-free": {
+    "tier-google": {
+      "orchestrator": {
+        "model": "google/gemini-2.5-pro",
+        "skills": [
+          "*"
+        ],
+        "mcps": [
+          "websearch"
+        ]
+      },
+      "oracle": {
+        "model": "google/gemini-2.5-pro",
+        "variant": "high",
+        "skills": [],
+        "mcps": []
+      },
+      "librarian": {
+        "model": "google/gemini-2.5-flash-lite",
+        "variant": "low",
+        "skills": [],
+        "mcps": [
+          "websearch",
+          "context7",
+          "grep_app"
+        ]
+      },
+      "explorer": {
+        "model": "google/gemini-2.5-flash-lite",
+        "variant": "low",
+        "skills": [],
+        "mcps": []
+      },
+      "designer": {
+        "model": "google/gemini-2.5-flash-lite",
+        "variant": "medium",
+        "skills": [
+          "agent-browser"
+        ],
+        "mcps": []
+      },
+      "fixer": {
+        "model": "google/gemini-2.5-flash-lite",
+        "variant": "low",
+        "skills": [],
+        "mcps": []
+      }
+    },
+    "tier-opencode": {
+      "orchestrator": {
+        "model": "opencode/kimi-k2.5-free",
+        "skills": [
+          "*"
+        ],
+        "mcps": [
+          "websearch"
+        ]
+      },
+      "oracle": {
+        "model": "opencode/kimi-k2.5-free",
+        "variant": "high",
+        "skills": [],
+        "mcps": []
+      },
+      "librarian": {
+        "model": "opencode/gpt-5-nano",
+        "variant": "low",
+        "skills": [],
+        "mcps": [
+          "websearch",
+          "context7",
+          "grep_app"
+        ]
+      },
+      "explorer": {
+        "model": "opencode/gpt-5-nano",
+        "variant": "low",
+        "skills": [],
+        "mcps": []
+      },
+      "designer": {
+        "model": "opencode/gpt-5-nano",
+        "variant": "medium",
+        "skills": [
+          "agent-browser"
+        ],
+        "mcps": []
+      },
+      "fixer": {
+        "model": "opencode/gpt-5-nano",
+        "variant": "low",
+        "skills": [],
+        "mcps": []
+      }
+    },
+    "tier-github": {
       "orchestrator": {
         "model": "github-copilot/claude-sonnet-4.5",
         "skills": [
@@ -12,13 +111,13 @@
         ]
       },
       "oracle": {
-        "model": "github-copilot/gpt-5.2",
+        "model": "github-copilot/gpt-5.2-codex",
         "variant": "high",
         "skills": [],
         "mcps": []
       },
       "librarian": {
-        "model": "github-copilot/claude-haiku-4.5",
+        "model": "github-copilot/gpt-5.1-codex-mini",
         "variant": "low",
         "skills": [],
         "mcps": [
@@ -28,13 +127,13 @@
         ]
       },
       "explorer": {
-        "model": "github-copilot/claude-haiku-4.5",
+        "model": "github-copilot/gpt-5.1-codex-mini",
         "variant": "low",
         "skills": [],
         "mcps": []
       },
       "designer": {
-        "model": "github-copilot/claude-haiku-4.5",
+        "model": "github-copilot/gpt-5.1-codex-mini",
         "variant": "medium",
         "skills": [
           "agent-browser"
@@ -42,7 +141,7 @@
         "mcps": []
       },
       "fixer": {
-        "model": "github-copilot/claude-haiku-4.5",
+        "model": "github-copilot/gpt-5.1-codex-mini",
         "variant": "low",
         "skills": [],
         "mcps": []
