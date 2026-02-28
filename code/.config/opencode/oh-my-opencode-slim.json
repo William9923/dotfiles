@@ -55,7 +55,7 @@
     },
     "tier-opencode": {
       "orchestrator": {
-        "model": "opencode/kimi-k2.5-free",
+        "model": "opencode/minimax-m2.5-free",
         "skills": [
           "*"
         ],
@@ -64,7 +64,7 @@
         ]
       },
       "oracle": {
-        "model": "opencode/kimi-k2.5-free",
+        "model": "opencode/minimax-m2.5-free",
         "variant": "high",
         "skills": [],
         "mcps": []
@@ -142,6 +142,54 @@
       },
       "fixer": {
         "model": "github-copilot/gpt-5.1-codex-mini",
+        "variant": "low",
+        "skills": [],
+        "mcps": []
+      }
+    }
+  ,
+    "tier-antigravity": {
+      "orchestrator": {
+        "model": "google/antigravity-gemini-3-flash",
+        "skills": [
+          "*"
+        ],
+        "mcps": [
+          "websearch"
+        ]
+      },
+      "oracle": {
+        "model": "google/antigravity-gemini-3.1-pro",
+        "variant": "high",
+        "skills": [],
+        "mcps": []
+      },
+      "librarian": {
+        "model": "google/antigravity-gemini-3-flash",
+        "variant": "low",
+        "skills": [],
+        "mcps": [
+          "websearch",
+          "context7",
+          "grep_app"
+        ]
+      },
+      "explorer": {
+        "model": "google/antigravity-gemini-3-flash",
+        "variant": "low",
+        "skills": [],
+        "mcps": []
+      },
+      "designer": {
+        "model": "google/antigravity-gemini-3-flash",
+        "variant": "medium",
+        "skills": [
+          "agent-browser"
+        ],
+        "mcps": []
+      },
+      "fixer": {
+        "model": "google/antigravity-gemini-3-flash",
         "variant": "low",
         "skills": [],
         "mcps": []
