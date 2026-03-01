@@ -119,7 +119,7 @@ op() {
 # opencode preset switcher
 op-preset() {
   local config_file="$HOME/.config/opencode/oh-my-opencode-slim.json"
-  local presets=("tier-google" "tier-opencode" "tier-github")
+  local presets=("tier-google" "tier-opencode" "tier-github" "tier-antigravity")
 
   # Show current preset if no arguments
   if [[ $# -eq 0 ]]; then

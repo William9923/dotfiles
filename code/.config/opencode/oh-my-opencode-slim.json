@@ -1,5 +1,5 @@
 {
-  "preset": "tier-github",
+  "preset": "tier-antigravity",
   "tmux": {
     "enabled": true,
     "layout": "main-vertical",
