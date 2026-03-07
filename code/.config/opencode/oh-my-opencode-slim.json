@@ -1,5 +1,5 @@
 {
-  "preset": "tier-antigravity",
+  "preset": "tier-opencode",
   "tmux": {
     "enabled": true,
     "layout": "main-vertical",
@@ -8,7 +8,7 @@
   "presets": {
     "tier-google": {
       "orchestrator": {
-        "model": "google/gemini-2.5-flash-lite",
+        "model": "google/gemini-3.1-pro-preview",
         "skills": [
           "*"
         ],
@@ -17,13 +17,13 @@
         ]
       },
       "oracle": {
-        "model": "google/gemini-2.5-flash-lite",
+        "model": "google/gemini-3.1-pro-preview",
         "variant": "high",
         "skills": [],
         "mcps": []
       },
       "librarian": {
-        "model": "google/gemini-2.5-flash-lite",
+        "model": "google/gemini-3-flash-preview",
         "variant": "low",
         "skills": [],
         "mcps": [
@@ -33,13 +33,13 @@
         ]
       },
       "explorer": {
-        "model": "google/gemini-2.5-flash-lite",
+        "model": "google/gemini-3-flash-preview",
         "variant": "low",
         "skills": [],
         "mcps": []
       },
       "designer": {
-        "model": "google/gemini-2.5-flash-lite",
+        "model": "google/gemini-3-flash-preview",
         "variant": "medium",
         "skills": [
           "agent-browser"
@@ -47,7 +47,7 @@
         "mcps": []
       },
       "fixer": {
-        "model": "google/gemini-2.5-flash-lite",
+        "model": "google/gemini-3-flash-preview",
         "variant": "low",
         "skills": [],
         "mcps": []
@@ -102,7 +102,7 @@
     },
     "tier-github": {
       "orchestrator": {
-        "model": "github-copilot/gpt-5.1-codex-mini",
+        "model": "github-copilot/claude-sonnet-4.6",
         "skills": [
           "*"
         ],
@@ -111,13 +111,13 @@
         ]
       },
       "oracle": {
-        "model": "github-copilot/gpt-5.2-codex",
+        "model": "github-copilot/claude-sonnet-4.6",
         "variant": "high",
         "skills": [],
         "mcps": []
       },
       "librarian": {
-        "model": "github-copilot/gpt-5.1-codex-mini",
+        "model": "github-copilot/claude-haiku-4.5",
         "variant": "low",
         "skills": [],
         "mcps": [
@@ -127,13 +127,13 @@
         ]
       },
       "explorer": {
-        "model": "github-copilot/gpt-5.1-codex-mini",
+        "model": "github-copilot/claude-haiku-4.5",
         "variant": "low",
         "skills": [],
         "mcps": []
       },
       "designer": {
-        "model": "github-copilot/gpt-5.1-codex-mini",
+        "model": "github-copilot/claude-haiku-4.5",
         "variant": "medium",
         "skills": [
           "agent-browser"
@@ -141,7 +141,7 @@
         "mcps": []
       },
       "fixer": {
-        "model": "github-copilot/gpt-5.1-codex-mini",
+        "model": "github-copilot/claude-haiku-4.5",
         "variant": "low",
         "skills": [],
         "mcps": []
@@ -150,7 +150,7 @@
   ,
     "tier-antigravity": {
       "orchestrator": {
-        "model": "google/antigravity-gemini-3-flash",
+        "model": "google/antigravity-gemini-3.1-pro",
         "skills": [
           "*"
         ],
