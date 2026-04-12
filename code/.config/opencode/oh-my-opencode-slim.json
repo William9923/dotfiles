@@ -1,5 +1,5 @@
 {
-  "preset": "tier-opencode",
+  "preset": "tier-github",
   "tmux": {
     "enabled": true,
     "layout": "main-vertical",

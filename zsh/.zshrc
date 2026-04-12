@@ -66,6 +66,7 @@ alias ll="exa -l -g --icons"
 alias lla="ll -a"
 alias zshconfig="nvim ~/.zshrc"
 alias syncnotes="z vimwiki && sh ~/vimwiki/sync.sh"
+alias bw="~/bw"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
