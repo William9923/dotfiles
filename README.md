@@ -18,11 +18,12 @@
 ## ✨ Table of Contents
 
 - [🎯 Overview](#-overview)
+- [🧠 Architecture / How It Works](#-architecture--how-it-works)
 - [🛠️ Tools & Applications](#️-tools--applications)
 - [🚀 Quick Start](#-quick-start)
 - [🔒 Security & Secrets](#-security--secrets)
 - [📁 Structure](#-structure)
-- [🎨 Features](#-features)
+- [🎨 Tools](#-tools)
 - [🤝 Contributing](#-contributing)
 
 ## 🎯 Overview
@@ -33,6 +34,24 @@ This repository contains my personal dotfiles and development environment config
 - **🔒 Secure**: Secrets are managed with templates and environment variables
 - **🏃 Portable**: Works across different Linux distributions
 - **⚡ Efficient**: Optimized for software development workflows
+
+## 🧠 Architecture / How It Works
+
+This repo is organized as GNU Stow packages by responsibility:
+
+- `code/` → editor + AI tooling (Neovim, OpenCode, Copilot)
+- `git/` → git + lazygit config
+- `terminal/` → Kitty + Atuin
+- `tmux/` → tmux config
+- `zsh/` → shell config + secrets source
+
+### Setup lifecycle
+
+1. Define secrets in `zsh/.zsh_secrets`
+2. Keep shareable config in `*.tmpl` files with `${VAR}` placeholders
+3. Run `./setup-secrets.sh` to generate real config files via `envsubst`
+4. The script refreshes `.gitignore` using `./update-gitignore.sh`
+5. Apply symlinks with `stow code git terminal tmux zsh`
 
 ## 🛠️ Tools & Applications
 
@@ -111,6 +130,19 @@ stow zsh       # Zsh shell and Powerlevel10k
 exec zsh
 ```
 
+### Stow maintenance
+
+```bash
+# Remove symlinks for one package
+stow -D code
+
+# Re-apply symlinks for one package
+stow code
+
+# Re-apply all packages
+stow code git terminal tmux zsh
+```
+
 ## 🔒 Security & Secrets
 
 This dotfiles repository uses a **template-based approach** for handling secrets:
@@ -119,6 +151,18 @@ This dotfiles repository uses a **template-based approach** for handling secrets
 - **Templates** (`.tmpl` files) are committed to git with `${VARIABLE}` placeholders
 - **Real config files** are generated locally with actual secrets
 - **Secrets file** (`zsh/.zsh_secrets`) is never committed
+
+### Safety rules:
+- Never commit `zsh/.zsh_secrets`
+- Never edit generated non-`.tmpl` files directly
+- Always edit the `.tmpl` source, then regenerate
+
+### When to rerun setup:
+Run this whenever you update secrets or any template file:
+
+```bash
+./setup-secrets.sh
+```
 
 ### Example:
 ```json
