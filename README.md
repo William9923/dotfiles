@@ -78,19 +78,9 @@ This repo is organized as GNU Stow packages by responsibility:
 
 ## 🚀 Quick Start
 
-### Prerequisites
+### Fedora-first setup
 
-**Install GNU Stow:**
-```bash
-# Ubuntu/Debian
-sudo apt-get install stow
-
-# Arch Linux  
-sudo pacman -S stow
-
-# macOS
-brew install stow
-```
+This repo is set up for Fedora Linux first. The one-command entrypoint installs packages, generates secret-backed files, and stows the config.
 
 ### Installation
 
@@ -102,20 +92,20 @@ cd ~/dotfiles
 
 2. **Set up secrets (first time only):**
 ```bash
-# Copy the example file and add your actual secrets
 cp .env.example zsh/.zsh_secrets
-vi zsh/.zsh_secrets  # Add your API keys and tokens
+vi zsh/.zsh_secrets
 ```
 
-3. **Generate config files from templates:**
+3. **Run the setup entrypoint:**
 ```bash
-./setup-secrets.sh
+./setup.sh minimal
+# or
+./setup.sh full
 ```
 
-4. **Apply configurations with Stow:**
+4. **Manual stow if needed:**
 ```bash
-# Install everything
-stow code git terminal tmux zsh
+stow --no-folding code git terminal tmux zsh
 
 # Or install selectively
 stow code      # Neovim, OpenCode, GitHub Copilot
@@ -130,6 +120,29 @@ stow zsh       # Zsh shell and Powerlevel10k
 exec zsh
 ```
 
+### Make targets
+
+```bash
+make help
+make doctor
+make check
+make setup-minimal
+make setup-full
+make install
+make restow
+make uninstall
+make sync
+```
+
+`make check` validates script syntax, and `make install/restow` controls only symlink operations.
+
+### Secrets lifecycle
+
+- `.tmpl` files are committed and contain placeholders
+- `setup-secrets.sh` reads `zsh/.zsh_secrets` and generates local files
+- `update-gitignore.sh` keeps generated outputs ignored
+- Never commit `zsh/.zsh_secrets`
+
 ### Stow maintenance
 
 ```bash
@@ -140,7 +153,7 @@ stow -D code
 stow code
 
 # Re-apply all packages
-stow code git terminal tmux zsh
+stow --no-folding code git terminal tmux zsh
 ```
 
 ## 🔒 Security & Secrets
@@ -221,7 +234,13 @@ dotfiles/
 │   ├── .p10k.zsh              # Powerlevel10k config
 │   └── .zsh_secrets           # Secrets (gitignored)
 ├── 🔒 .env.example            # Template for secrets
-├── ⚙️ setup-secrets.sh        # Setup script
+├── ⚙️ setup.sh                # Fedora bootstrap entrypoint
+├── ⚙️ setup-secrets.sh        # Template rendering script
+├── 📦 packages/               # Fedora package profiles
+│   ├── fedora-minimal.txt
+│   └── fedora-full.txt
+├── 🧰 Makefile                # Operator shortcuts
+├── 🔁 bin/.local/bin/sync-dots # Safe git sync helper
 └── 📖 README.md               # This file
 ```
 

@@ -1,0 +1,38 @@
+# Fedora full setup packages
+# Base toolchain and editor/runtime stack
+git
+stow
+zsh
+tmux
+neovim
+kitty
+atuin
+lazygit
+fzf
+ripgrep
+fd-find
+bat
+jq
+curl
+wget
+unzip
+make
+gcc
+gcc-c++
+python3
+python3-pip
+nodejs
+npm
+lua
+luarocks
+
+# Useful extras for a fuller workstation
+gh
+direnv
+shellcheck
+stylua
+
+# If available on your Fedora release, consider also:
+# - type-the-silver-searcher
+# - tree
+# - htop

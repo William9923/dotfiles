@@ -1,0 +1,26 @@
+# Fedora minimal setup packages
+git
+stow
+zsh
+tmux
+neovim
+kitty
+atuin
+lazygit
+fzf
+ripgrep
+fd-find
+bat
+jq
+curl
+wget
+unzip
+make
+gcc
+gcc-c++
+python3
+python3-pip
+nodejs
+npm
+lua
+luarocks

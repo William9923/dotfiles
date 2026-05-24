@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+DOTFILES_DIR="${DOTFILES_DIR:-$HOME/dotfiles}"
+REMOTE_NAME="${DOTFILES_REMOTE:-origin}"
+
+require_cmd() { command -v "$1" >/dev/null 2>&1 || { echo "Missing required command: $1"; exit 1; }; }
+
+resolved_branch() {
+  local branch
+  branch="$(git -C "$DOTFILES_DIR" rev-parse --abbrev-ref --symbolic-full-name '@{u}' 2>/dev/null || true)"
+  if [[ -n "$branch" ]]; then
+    echo "${branch#${REMOTE_NAME}/}"
+    return
+  fi
+
+  if git -C "$DOTFILES_DIR" ls-remote --exit-code --heads "$REMOTE_NAME" master >/dev/null 2>&1; then
+    echo "master"
+    return
+  fi
+
+  if git -C "$DOTFILES_DIR" ls-remote --exit-code --heads "$REMOTE_NAME" main >/dev/null 2>&1; then
+    echo "main"
+    return
+  fi
+
+  git -C "$DOTFILES_DIR" branch --show-current
+}
+
+assert_safe_staged_paths() {
+  local bad_paths
+  bad_paths="$({
+    git -C "$DOTFILES_DIR" diff --cached --name-only | awk '
+      /(^|\/)\.env($|\.)/ ||
+      /(^|\/)\.gitconfig\.local$/ ||
+      /(^|\/)\.ssh(\/|$)/ ||
+      /(^|\/)\.git-credentials$/ ||
+      /(^|\/)\.netrc$/ ||
+      /(^|\/)id_(rsa|dsa|ecdsa|ed25519)$/ ||
+      /\.(pem|key|p12)$/ { print }
+    '
+  } || true)"
+
+  if [[ -n "$bad_paths" ]]; then
+    printf '%s\n' "$bad_paths" >&2
+    echo "Blocked sensitive paths in staged changes." >&2
+    exit 1
+  fi
+}
+
+main() {
+  require_cmd git
+  [[ -d "$DOTFILES_DIR/.git" ]] || { echo "Not a git repository: $DOTFILES_DIR"; exit 1; }
+
+  local branch
+  branch="$(resolved_branch)"
+
+  git -C "$DOTFILES_DIR" pull --ff-only --autostash "$REMOTE_NAME" "$branch"
+
+  git -C "$DOTFILES_DIR" add -A
+
+  if git -C "$DOTFILES_DIR" diff --cached --quiet; then
+    echo "No changes to sync."
+    exit 0
+  fi
+
+  assert_safe_staged_paths
+
+  local ts msg
+  ts="$(date +%Y%m%d-%H%M%S)"
+  msg="chore(dotfiles): sync $ts"
+  git -C "$DOTFILES_DIR" commit -m "$msg"
+  git -C "$DOTFILES_DIR" push "$REMOTE_NAME" "$branch"
+}
+
+main "$@"
