@@ -151,9 +151,25 @@ make install
 make restow
 make uninstall
 make sync
+make test-bootstrap-fedora
+make test-bootstrap-fedora-full
 ```
 
 `make check` validates script syntax, and `make install/restow` controls only symlink operations. `setup.sh` also runs `mise install -y` when mise/config are present and attempts Commitizen global install via npm.
+
+### Container bootstrap test
+
+Run a Fedora minimal-image smoke test inside Docker:
+
+```bash
+./test-bootstrap-fedora.sh minimal
+./test-bootstrap-fedora.sh full
+make test-bootstrap-fedora
+```
+
+Defaults: `FEDORA_IMAGE=fedora:latest`, `SKIP_MISE_INSTALL=1`, and a unique container name. Set `SKIP_MISE_INSTALL=0` to exercise the full setup path; `SETUP_SKIP_MISE=1` and `SETUP_SKIP_COMMITIZEN=1` are honored by `setup.sh`.
+
+Note: some Fedora minimal images may not provide all packages (for example `lazygit` or `mise`) in default enabled repos. `setup.sh` uses `dnf --skip-unavailable` so bootstrap can continue in those environments.
 
 ### Post-setup verification
 

@@ -12,6 +12,8 @@ PROFILE_NAME=""
 STOW_STATUS="not started"
 MISE_STATUS="skipped"
 COMMITIZEN_STATUS="skipped"
+SETUP_SKIP_MISE="${SETUP_SKIP_MISE:-0}"
+SETUP_SKIP_COMMITIZEN="${SETUP_SKIP_COMMITIZEN:-0}"
 
 usage() {
   echo "Usage: $0 minimal|full"
@@ -48,11 +50,19 @@ install_packages() {
   done < "$profile_file"
 
   if ((${#pkgs[@]})); then
-    sudo dnf install -y "${pkgs[@]}"
+    if ! sudo dnf install -y --skip-unavailable "${pkgs[@]}"; then
+      echo "Warning: package install reported issues; continuing due to --skip-unavailable."
+    fi
   fi
 }
 
 install_mise_tools() {
+  if [[ "$SETUP_SKIP_MISE" == "1" ]]; then
+    echo "Skipping mise tool install (SETUP_SKIP_MISE=1)."
+    MISE_STATUS="skipped (SETUP_SKIP_MISE=1)"
+    return 0
+  fi
+
   local mise_config="$HOME/.config/mise/config.toml"
 
   if command -v mise >/dev/null 2>&1 && [[ -f "$mise_config" ]]; then
@@ -69,6 +79,12 @@ install_mise_tools() {
 }
 
 install_commitizen() {
+  if [[ "$SETUP_SKIP_COMMITIZEN" == "1" ]]; then
+    echo "Skipping Commitizen install (SETUP_SKIP_COMMITIZEN=1)."
+    COMMITIZEN_STATUS="skipped (SETUP_SKIP_COMMITIZEN=1)"
+    return 0
+  fi
+
   if command -v npm >/dev/null 2>&1; then
     if ! npm install -g commitizen cz-conventional-changelog; then
       COMMITIZEN_STATUS="failed (try 'npm config set prefix ~/.local' and ensure ~/.local/bin is in PATH)"
