@@ -46,7 +46,7 @@ This repository contains my personal dotfiles and development environment config
 
 This repo is organized as GNU Stow packages by responsibility:
 
-- `code/` → editor + AI tooling (Neovim, OpenCode, Copilot)
+- `code/` → editor + AI tooling (Neovim, OpenCode, Copilot) + pinned OpenCode plugin lockfile
 - `git/` → git + lazygit config
 - `config/` → shared app config (mise)
 - `commitizen/` → Commitizen config
@@ -157,6 +157,11 @@ make test-bootstrap-fedora-full
 
 `make check` validates script syntax, and `make install/restow` controls only symlink operations. `setup.sh` also runs `mise install -y` when mise/config are present and attempts Commitizen global install via npm.
 
+### OpenCode dependency lockfile
+
+`code/.config/opencode/package-lock.json` is committed intentionally to pin OpenCode plugin dependency resolution (currently including `@opencode-ai/plugin`).
+It improves reproducibility across machines and CI while containing only package metadata (versions, integrity hashes, and dependency graph) — no secrets.
+
 ### Container bootstrap test
 
 Run a Fedora minimal-image smoke test inside Docker:
@@ -214,6 +219,7 @@ This dotfiles repository uses a **template-based approach** for handling secrets
 - **Templates** (`.tmpl` files) are committed to git with `${VARIABLE}` placeholders
 - **Real config files** are generated locally with actual secrets
 - **Secrets file** (`zsh/.zsh_secrets`) is never committed
+- **Lockfiles** (for example `code/.config/opencode/package-lock.json`) are safe to commit and are not secret-bearing template outputs
 
 ### Safety rules:
 - Never commit `zsh/.zsh_secrets`
@@ -268,6 +274,7 @@ dotfiles/
 │   └── .config/
 │       ├── nvim/              # Neovim configuration (LazyVim)
 │       ├── opencode/          # OpenCode AI assistant
+│       │   └── package-lock.json # Pinned OpenCode plugin dependency graph
 │       └── github-copilot/    # GitHub Copilot settings
 ├── 📝 git/
 │   ├── .gitconfig             # Git configuration
