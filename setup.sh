@@ -8,6 +8,10 @@ DOTFILES_DIR="${DOTFILES_DIR:-$SCRIPT_DIR}"
 PACKAGES_DIR="$DOTFILES_DIR/packages"
 STOW_PACKAGES=(code git terminal tmux zsh config commitizen)
 BACKUP_DIR=""
+PROFILE_NAME=""
+STOW_STATUS="not started"
+MISE_STATUS="skipped"
+COMMITIZEN_STATUS="skipped"
 
 usage() {
   echo "Usage: $0 minimal|full"
@@ -52,19 +56,29 @@ install_mise_tools() {
   local mise_config="$HOME/.config/mise/config.toml"
 
   if command -v mise >/dev/null 2>&1 && [[ -f "$mise_config" ]]; then
-    mise install -y
+    if mise install -y; then
+      MISE_STATUS="installed"
+    else
+      MISE_STATUS="failed (check mise config and tool definitions)"
+      echo "Warning: mise install -y failed; continuing."
+    fi
   else
     echo "Skipping mise tool install (missing mise command or config)."
+    MISE_STATUS="skipped"
   fi
 }
 
 install_commitizen() {
   if command -v npm >/dev/null 2>&1; then
     if ! npm install -g commitizen cz-conventional-changelog; then
+      COMMITIZEN_STATUS="failed (try 'npm config set prefix ~/.local' and ensure ~/.local/bin is in PATH)"
       echo "Warning: failed to install Commitizen globally via npm; continuing."
+    else
+      COMMITIZEN_STATUS="installed"
     fi
   else
-    echo "Skipping Commitizen install (npm not available)."
+    echo "Skipping Commitizen install (npm not available; install runtimes via mise first)."
+    COMMITIZEN_STATUS="skipped (npm missing; run 'mise install' then rerun setup)"
   fi
 }
 
@@ -91,7 +105,8 @@ backup_conflicts() {
           resolved_target="$(readlink -f "$target" 2>/dev/null || true)"
           resolved_source="$(readlink -f "$source_file" 2>/dev/null || true)"
           [[ "$resolved_target" == "$resolved_source" ]] && continue
-          rm -f "$target"
+          mkdir -p "$conflict_root/$(dirname "$rel")"
+          mv "$target" "$conflict_root/$rel"
           continue
         fi
 
@@ -105,6 +120,7 @@ backup_conflicts() {
 main() {
   [[ $# -eq 1 ]] || { usage; exit 1; }
   [[ "$PROFILE" == "minimal" || "$PROFILE" == "full" ]] || { usage; exit 1; }
+  PROFILE_NAME="$PROFILE"
   is_fedora || { echo "This setup script currently supports Fedora Linux only."; exit 1; }
 
   require_cmd sudo
@@ -125,13 +141,18 @@ main() {
   for pkg in "${STOW_PACKAGES[@]}"; do
     stow --dir="$DOTFILES_DIR" --target="$HOME" --no-folding "$pkg"
   done
+  STOW_STATUS="stowed ${#STOW_PACKAGES[@]} packages"
 
   install_mise_tools
   install_commitizen
 
   echo "Setup complete."
-  echo "Backup dir: $backup_dir"
-  echo "Packages: ${STOW_PACKAGES[*]}"
+  echo "--- Summary ---"
+  echo "Profile: $PROFILE_NAME"
+  echo "Stowed packages: ${STOW_PACKAGES[*]}"
+  echo "Backup path: ${backup_dir:-none}"
+  echo "Optional: mise install => $MISE_STATUS"
+  echo "Optional: commitizen install => $COMMITIZEN_STATUS"
 }
 
 main "$@"

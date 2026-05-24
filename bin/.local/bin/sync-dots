@@ -7,6 +7,8 @@ REMOTE_NAME="${DOTFILES_REMOTE:-origin}"
 
 require_cmd() { command -v "$1" >/dev/null 2>&1 || { echo "Missing required command: $1"; exit 1; }; }
 
+DRY_RUN=0
+
 resolved_branch() {
   local branch
   branch="$(git -C "$DOTFILES_DIR" rev-parse --abbrev-ref --symbolic-full-name '@{u}' 2>/dev/null || true)"
@@ -53,8 +55,39 @@ main() {
   require_cmd git
   [[ -d "$DOTFILES_DIR/.git" ]] || { echo "Not a git repository: $DOTFILES_DIR"; exit 1; }
 
+  if [[ "${1:-}" == "--dry-run" ]]; then
+    DRY_RUN=1
+  elif [[ $# -gt 0 ]]; then
+    echo "Usage: $0 [--dry-run]"
+    exit 1
+  fi
+
   local branch
   branch="$(resolved_branch)"
+  local current_branch
+  current_branch="$(git -C "$DOTFILES_DIR" branch --show-current)"
+  [[ -n "$current_branch" ]] || { echo "Refusing to sync from detached HEAD."; exit 1; }
+
+  echo "Remote: $REMOTE_NAME"
+  echo "Branch: $branch"
+
+  if ((DRY_RUN)); then
+    echo "Dry run: would pull --ff-only --autostash $REMOTE_NAME $branch"
+    echo "Dry run: checking current pending changes"
+    if [[ -n "$(git -C "$DOTFILES_DIR" status --porcelain)" ]]; then
+      echo "Dry run: changes detected"
+      echo "Dry run: would stage all changes, check sensitive paths, commit, and push to $REMOTE_NAME $branch"
+      git -C "$DOTFILES_DIR" status --short
+      if ! git -C "$DOTFILES_DIR" diff --cached --quiet; then
+        echo "Dry run: validating sensitive-path guard on staged changes"
+        assert_safe_staged_paths
+      fi
+    else
+      echo "Dry run: no local changes detected"
+      echo "Dry run: would only perform pull safety check"
+    fi
+    exit 0
+  fi
 
   git -C "$DOTFILES_DIR" pull --ff-only --autostash "$REMOTE_NAME" "$branch"
 

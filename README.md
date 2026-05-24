@@ -35,6 +35,13 @@ This repository contains my personal dotfiles and development environment config
 - **🏃 Portable**: Works across different Linux distributions
 - **⚡ Efficient**: Optimized for software development workflows
 
+## 📦 Profile Matrix
+
+| Profile | Installs |
+|---|---|
+| minimal | Core system tools, editor, shell, terminal, and mise |
+| full | minimal + extra workstation utilities |
+
 ## 🧠 Architecture / How It Works
 
 This repo is organized as GNU Stow packages by responsibility:
@@ -54,6 +61,12 @@ This repo is organized as GNU Stow packages by responsibility:
 3. Run `./setup-secrets.sh` to generate real config files via `envsubst`
 4. The script refreshes `.gitignore` using `./update-gitignore.sh`
 5. Apply symlinks with `stow code git terminal tmux zsh config commitizen`
+
+### Managed by what
+
+- **stow**: app and shell config symlinks
+- **templates**: secret-backed generated files
+- **mise**: language/runtime tool versions
 
 ## 🛠️ Tools & Applications
 
@@ -142,6 +155,15 @@ make sync
 
 `make check` validates script syntax, and `make install/restow` controls only symlink operations. `setup.sh` also runs `mise install -y` when mise/config are present and attempts Commitizen global install via npm.
 
+### Post-setup verification
+
+```bash
+bash -n setup.sh
+bash -n bin/.local/bin/sync-dots
+make doctor
+make check
+```
+
 ### Secrets lifecycle
 
 - `.tmpl` files are committed and contain placeholders
@@ -161,6 +183,11 @@ stow code
 # Re-apply all packages
 stow --no-folding code git terminal tmux zsh config commitizen
 ```
+
+### Troubleshooting
+
+- **mise activation missing**: restart your shell, then ensure `mise activate zsh` is sourced from `~/.zshrc`.
+- **Commitizen npm permission issues**: run `npm config set prefix ~/.local` and ensure `~/.local/bin` is in `PATH`, then rerun `./setup.sh minimal|full`.
 
 ## 🔒 Security & Secrets
 
