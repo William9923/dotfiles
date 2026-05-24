@@ -168,6 +168,7 @@ make test-bootstrap-fedora
 ```
 
 Defaults: `FEDORA_IMAGE=fedora:latest`, `SKIP_MISE_INSTALL=1`, and a unique container name. Set `SKIP_MISE_INSTALL=0` to exercise the full setup path; `SETUP_SKIP_MISE=1` and `SETUP_SKIP_COMMITIZEN=1` are honored by `setup.sh`.
+For faster smoke tests that focus on stow/secrets wiring, use `BOOTSTRAP_TEST_SKIP_PACKAGES=1`.
 
 Note: some Fedora minimal images may not provide all packages (for example `lazygit` or `mise`) in default enabled repos. `setup.sh` uses `dnf --skip-unavailable` so bootstrap can continue in those environments.
 

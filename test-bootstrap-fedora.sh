@@ -6,6 +6,7 @@ PROFILE="${1:-minimal}"
 FEDORA_IMAGE="${FEDORA_IMAGE:-fedora:latest}"
 TEST_CONTAINER_NAME="${TEST_CONTAINER_NAME:-dotfiles-bootstrap-$(date +%Y%m%d%H%M%S)}"
 SKIP_MISE_INSTALL="${SKIP_MISE_INSTALL:-1}"
+BOOTSTRAP_TEST_SKIP_PACKAGES="${BOOTSTRAP_TEST_SKIP_PACKAGES:-0}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 DOTFILES_DIR="$SCRIPT_DIR"
 CONTAINER_EXIT_CODE=0
@@ -41,11 +42,13 @@ if [[ -f "$DOTFILES_DIR/.env.example" ]]; then
   docker cp "$DOTFILES_DIR/.env.example" "$TEST_CONTAINER_NAME:/root/dotfiles/zsh/.zsh_secrets"
 fi
 
+setup_env=( -e "SETUP_SKIP_PACKAGES=$BOOTSTRAP_TEST_SKIP_PACKAGES" )
 if [[ "$SKIP_MISE_INSTALL" == "1" ]]; then
-  docker exec -e SETUP_SKIP_MISE=1 -e SETUP_SKIP_COMMITIZEN=1 "$TEST_CONTAINER_NAME" bash -lc 'cd /root/dotfiles && ./setup.sh "'$PROFILE'"'
+  setup_env+=( -e SETUP_SKIP_MISE=1 -e SETUP_SKIP_COMMITIZEN=1 )
 else
-  docker exec -e SETUP_SKIP_MISE=0 -e SETUP_SKIP_COMMITIZEN=0 "$TEST_CONTAINER_NAME" bash -lc 'cd /root/dotfiles && ./setup.sh "'$PROFILE'"'
+  setup_env+=( -e SETUP_SKIP_MISE=0 -e SETUP_SKIP_COMMITIZEN=0 )
 fi
+docker exec "${setup_env[@]}" "$TEST_CONTAINER_NAME" bash -lc 'cd /root/dotfiles && ./setup.sh "'$PROFILE'"'
 
 docker exec "$TEST_CONTAINER_NAME" bash -lc 'test -L /root/.zshrc && test -L /root/.gitconfig && test -L /root/.tmux.conf'
 echo "PASS: Fedora $PROFILE bootstrap test"

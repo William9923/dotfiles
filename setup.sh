@@ -14,6 +14,7 @@ MISE_STATUS="skipped"
 COMMITIZEN_STATUS="skipped"
 SETUP_SKIP_MISE="${SETUP_SKIP_MISE:-0}"
 SETUP_SKIP_COMMITIZEN="${SETUP_SKIP_COMMITIZEN:-0}"
+SETUP_SKIP_PACKAGES="${SETUP_SKIP_PACKAGES:-0}"
 
 usage() {
   echo "Usage: $0 minimal|full"
@@ -39,8 +40,16 @@ is_fedora() {
 }
 
 install_packages() {
+  if [[ "$SETUP_SKIP_PACKAGES" == "1" ]]; then
+    echo "Skipping package install (SETUP_SKIP_PACKAGES=1)."
+    return 0
+  fi
+
   local profile_file="$1"
   local pkgs=()
+  local installable=()
+  local missing=()
+  local pkg
 
   [[ -f "$profile_file" ]] || { echo "Missing package profile: $profile_file"; exit 1; }
 
@@ -50,8 +59,20 @@ install_packages() {
   done < "$profile_file"
 
   if ((${#pkgs[@]})); then
-    if ! sudo dnf install -y --skip-unavailable "${pkgs[@]}"; then
-      echo "Warning: package install reported issues; continuing due to --skip-unavailable."
+    for pkg in "${pkgs[@]}"; do
+      if sudo dnf -q info "$pkg" >/dev/null 2>&1; then
+        installable+=("$pkg")
+      else
+        missing+=("$pkg")
+      fi
+    done
+
+    if ((${#installable[@]})); then
+      sudo dnf install -y "${installable[@]}"
+    fi
+
+    if ((${#missing[@]})); then
+      echo "Warning: skipped unavailable packages: ${missing[*]}"
     fi
   fi
 }
