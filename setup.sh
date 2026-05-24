@@ -6,7 +6,7 @@ PROFILE="${1:-}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 DOTFILES_DIR="${DOTFILES_DIR:-$SCRIPT_DIR}"
 PACKAGES_DIR="$DOTFILES_DIR/packages"
-STOW_PACKAGES=(code git terminal tmux zsh)
+STOW_PACKAGES=(code git terminal tmux zsh config commitizen)
 BACKUP_DIR=""
 
 usage() {
@@ -45,6 +45,26 @@ install_packages() {
 
   if ((${#pkgs[@]})); then
     sudo dnf install -y "${pkgs[@]}"
+  fi
+}
+
+install_mise_tools() {
+  local mise_config="$HOME/.config/mise/config.toml"
+
+  if command -v mise >/dev/null 2>&1 && [[ -f "$mise_config" ]]; then
+    mise install -y
+  else
+    echo "Skipping mise tool install (missing mise command or config)."
+  fi
+}
+
+install_commitizen() {
+  if command -v npm >/dev/null 2>&1; then
+    if ! npm install -g commitizen cz-conventional-changelog; then
+      echo "Warning: failed to install Commitizen globally via npm; continuing."
+    fi
+  else
+    echo "Skipping Commitizen install (npm not available)."
   fi
 }
 
@@ -105,6 +125,9 @@ main() {
   for pkg in "${STOW_PACKAGES[@]}"; do
     stow --dir="$DOTFILES_DIR" --target="$HOME" --no-folding "$pkg"
   done
+
+  install_mise_tools
+  install_commitizen
 
   echo "Setup complete."
   echo "Backup dir: $backup_dir"

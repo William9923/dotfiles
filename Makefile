@@ -1,4 +1,4 @@
-PACKAGES ?= code git terminal tmux zsh
+PACKAGES ?= code git terminal tmux zsh config commitizen
 
 .PHONY: help doctor check install restow uninstall setup-minimal setup-full sync
 

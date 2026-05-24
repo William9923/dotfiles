@@ -94,6 +94,11 @@ zsh-defer [ -s "/home/william-nobara/.bun/_bun" ] && source "/home/william-nobar
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
+# mise
+if command -v mise >/dev/null 2>&1; then
+  zsh-defer eval "$(mise activate zsh)"
+fi
+
 # opencode - Function to run OpenCode on an available port
 unalias op 2>/dev/null
 op() {

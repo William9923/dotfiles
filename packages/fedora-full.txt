@@ -23,6 +23,7 @@ python3
 python3-pip
 nodejs
 npm
+mise
 lua
 luarocks
 

@@ -41,6 +41,8 @@ This repo is organized as GNU Stow packages by responsibility:
 
 - `code/` → editor + AI tooling (Neovim, OpenCode, Copilot)
 - `git/` → git + lazygit config
+- `config/` → shared app config (mise)
+- `commitizen/` → Commitizen config
 - `terminal/` → Kitty + Atuin
 - `tmux/` → tmux config
 - `zsh/` → shell config + secrets source
@@ -51,7 +53,7 @@ This repo is organized as GNU Stow packages by responsibility:
 2. Keep shareable config in `*.tmpl` files with `${VAR}` placeholders
 3. Run `./setup-secrets.sh` to generate real config files via `envsubst`
 4. The script refreshes `.gitignore` using `./update-gitignore.sh`
-5. Apply symlinks with `stow code git terminal tmux zsh`
+5. Apply symlinks with `stow code git terminal tmux zsh config commitizen`
 
 ## 🛠️ Tools & Applications
 
@@ -70,6 +72,8 @@ This repo is organized as GNU Stow packages by responsibility:
 | **Lazygit** | Simple terminal UI for git commands | `git/.config/lazygit/` |
 | **GitHub Copilot** | AI-powered code completion | `code/.config/github-copilot/` |
 | **OpenCode** | Advanced development assistant | `code/.config/opencode/` |
+| **mise** | Runtime/tool manager for per-project tool installs | `config/.config/mise/` |
+| **Commitizen** | Conventional commit helper | `commitizen/.czrc` |
 
 ### 🎨 Themes & Appearance
 - **Rose Pine** theme for Kitty terminal
@@ -105,11 +109,13 @@ vi zsh/.zsh_secrets
 
 4. **Manual stow if needed:**
 ```bash
-stow --no-folding code git terminal tmux zsh
+stow --no-folding code git terminal tmux zsh config commitizen
 
 # Or install selectively
 stow code      # Neovim, OpenCode, GitHub Copilot
 stow git       # Git and Lazygit configuration  
+stow config    # mise config and shared tooling
+stow commitizen # Commitizen config
 stow terminal  # Kitty and Atuin
 stow tmux      # Tmux configuration
 stow zsh       # Zsh shell and Powerlevel10k
@@ -134,7 +140,7 @@ make uninstall
 make sync
 ```
 
-`make check` validates script syntax, and `make install/restow` controls only symlink operations.
+`make check` validates script syntax, and `make install/restow` controls only symlink operations. `setup.sh` also runs `mise install -y` when mise/config are present and attempts Commitizen global install via npm.
 
 ### Secrets lifecycle
 
@@ -153,7 +159,7 @@ stow -D code
 stow code
 
 # Re-apply all packages
-stow --no-folding code git terminal tmux zsh
+stow --no-folding code git terminal tmux zsh config commitizen
 ```
 
 ## 🔒 Security & Secrets
