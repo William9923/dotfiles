@@ -69,7 +69,8 @@ alias bw="~/bw"
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # Source color palette for shell-driven tools (fzf, tmux, etc.)
-[[ -r "${XDG_CONFIG_HOME:-$HOME/.config}/theme/kanagawa-dragon/palette.zsh" ]] && source "$_"
+local palette="${XDG_CONFIG_HOME:-$HOME/.config}/theme/kanagawa-dragon/palette.zsh"
+[[ -r "$palette" ]] && source "$palette"
 
 # fzf shell integration
 if [[ -o interactive ]] && command -v fzf >/dev/null 2>&1; then
@@ -156,12 +157,6 @@ if [[ -o interactive ]] && command -v fzf >/dev/null 2>&1; then
   bindkey '^S' fzf-rg-widget
 fi
 
-export NVM_DIR="$HOME/.nvm"
-zsh-defer [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-zsh-defer [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-zsh-defer [ -s "/home/william-nobara/.gvm/scripts/gvm" ] && source "/home/william-nobara/.gvm/scripts/gvm"
-
 # Following line was automatically added by arttime installer
 export MANPATH=/home/william-nobara/.local/share/man:$MANPATH
 
@@ -178,13 +173,16 @@ zsh-defer [ -s "/home/william-nobara/.bun/_bun" ] && source "/home/william-nobar
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
-# direnv
-eval "$(direnv hook zsh)"
-
 # mise
 if command -v mise >/dev/null 2>&1; then
   zsh-defer eval "$(mise activate zsh)"
 fi
+
+# Runtimes managed by mise (replaces nvm, gvm, direnv)
+# Previously:
+#   nvm → mise node
+#   gvm → mise go
+#   direnv → can be replaced with .mise.toml per-project
 
 # opencode - Function to run OpenCode on an available port
 unalias op 2>/dev/null

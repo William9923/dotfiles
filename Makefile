@@ -1,9 +1,9 @@
-PACKAGES ?= code git terminal tmux zsh config commitizen
+PACKAGES ?= code commitizen config git mise terminal tmux zsh
 
-.PHONY: help doctor check install restow uninstall setup-minimal setup-full sync test-bootstrap-fedora test-bootstrap-fedora-full
+.PHONY: help doctor check install restow uninstall setup-minimal setup-full sync setup-secrets test-bootstrap-fedora test-bootstrap-fedora-full
 
 help:
-	@printf '%s\n' "Targets: help doctor check install restow uninstall setup-minimal setup-full sync test-bootstrap-fedora test-bootstrap-fedora-full"
+	@printf '%s\n' "Targets: help doctor check install restow uninstall setup-minimal setup-full sync setup-secrets test-bootstrap-fedora test-bootstrap-fedora-full"
 
 doctor:
 	@command -v git >/dev/null
@@ -33,6 +33,9 @@ setup-full:
 
 sync:
 	@bin/.local/bin/sync-dots
+
+setup-secrets:
+	@./setup-secrets.sh
 
 test-bootstrap-fedora:
 	@./test-bootstrap-fedora.sh minimal

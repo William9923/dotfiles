@@ -3,6 +3,7 @@ zsh/.zsh_secrets
 
 # Generated files from .tmpl templates (contain real secrets)
 # Auto-generated - do not edit manually
+git/.gitconfig.local
 code/.config/github-copilot/apps.json
 code/.config/opencode/opencode.json
 
