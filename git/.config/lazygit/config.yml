@@ -4,6 +4,35 @@ git:
     - externalDiffCommand: difft --color=always
 
 gui:
+  theme:
+    # Kanagawa Dragon
+    activeBorderColor:
+      - "#8ba4b0"
+      - "bold"
+    inactiveBorderColor:
+      - "#625e5a"
+    searchingActiveBorderColor:
+      - "#c4b28a"
+      - "bold"
+    optionsTextColor:
+      - "#8992a7"
+    selectedLineBgColor:
+      - "#282727"
+    inactiveViewSelectedLineBgColor:
+      - "#1d1c19"
+    cherryPickedCommitFgColor:
+      - "#8ba4b0"
+    cherryPickedCommitBgColor:
+      - "#282727"
+    markedBaseCommitFgColor:
+      - "#c4b28a"
+    markedBaseCommitBgColor:
+      - "#282727"
+    unstagedChangesColor:
+      - "#c4746e"
+    defaultFgColor:
+      - "#c5c9c5"
+
   spinner:
     # The frames of the spinner animation.
     frames:
