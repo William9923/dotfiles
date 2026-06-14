@@ -31,7 +31,7 @@
 This repository contains my personal dotfiles and development environment configuration. It's designed to be:
 
 - **🔧 Modular**: Each tool has its own package for selective installation
-- **🔒 Secure**: Secrets are managed with templates and environment variables
+- **🔒 Secure**: Secrets are sourced from a central file and never committed
 - **🏃 Portable**: Works across different Linux distributions
 - **⚡ Efficient**: Optimized for software development workflows
 
@@ -57,15 +57,12 @@ This repo is organized as GNU Stow packages by responsibility:
 ### Setup lifecycle
 
 1. Define secrets in `zsh/.zsh_secrets`
-2. Keep shareable config in `*.tmpl` files with `${VAR}` placeholders
-3. Run `./setup-secrets.sh` to generate real config files via `envsubst`
-4. The script refreshes `.gitignore` using `./update-gitignore.sh`
-5. Apply symlinks with `stow code git terminal tmux zsh config commitizen`
+2. Run `./setup-secrets.sh` to generate config files from secrets
+3. Apply symlinks with `stow code git terminal tmux zsh config commitizen`
 
 ### Managed by what
 
 - **stow**: app and shell config symlinks
-- **templates**: secret-backed generated files
 - **mise**: language/runtime tool versions
 
 ## 🛠️ Tools & Applications
@@ -188,10 +185,9 @@ make check
 
 ### Secrets lifecycle
 
-- `.tmpl` files are committed and contain placeholders
-- `setup-secrets.sh` reads `zsh/.zsh_secrets` and generates local files
-- `update-gitignore.sh` keeps generated outputs ignored
-- Never commit `zsh/.zsh_secrets`
+- All secrets live in `zsh/.zsh_secrets` (gitignored, never commit)
+- `setup-secrets.sh` reads `zsh/.zsh_secrets` and generates config files
+- Generated files are gitignored
 
 ### Stow maintenance
 
@@ -213,45 +209,24 @@ stow --no-folding code git terminal tmux zsh config commitizen
 
 ## 🔒 Security & Secrets
 
-This dotfiles repository uses a **template-based approach** for handling secrets:
+Secrets are managed through a single **central secrets file** approach:
 
 ### How it works:
-- **Templates** (`.tmpl` files) are committed to git with `${VARIABLE}` placeholders
-- **Real config files** are generated locally with actual secrets
-- **Secrets file** (`zsh/.zsh_secrets`) is never committed
-- **Lockfiles** (for example `code/.config/opencode/package-lock.json`) are safe to commit and are not secret-bearing template outputs
+- **Secrets file** (`zsh/.zsh_secrets`) is never committed (gitignored)
+- **`setup-secrets.sh`** generates local config files by sourcing the secrets file
+- **Generated files** (`.gitconfig.local`, `apps.json`) contain real secrets and are gitignored
+- **Config files with `{env:VAR}` syntax** (like `opencode.json`) resolve secrets at runtime from environment variables
 
 ### Safety rules:
 - Never commit `zsh/.zsh_secrets`
-- Never edit generated non-`.tmpl` files directly
-- Always edit the `.tmpl` source, then regenerate
+- Never commit generated secret-bearing files
+- Edit `zsh/.zsh_secrets`, then rerun `setup-secrets.sh`
 
 ### When to rerun setup:
-Run this whenever you update secrets or any template file:
+Run this whenever you update secrets:
 
 ```bash
 ./setup-secrets.sh
-```
-
-### Example:
-```json
-// opencode.json.tmpl (committed)
-{
-  "mcp": {
-    "ref-tools": {
-      "url": "https://api.ref.tools/mcp?apiKey=${REF_API_KEY}"
-    }
-  }
-}
-
-// opencode.json (generated locally, gitignored)
-{
-  "mcp": {
-    "ref-tools": {
-      "url": "https://api.ref.tools/mcp?apiKey=your-actual-key"
-    }
-  }
-}
 ```
 
 ### Managing secrets:

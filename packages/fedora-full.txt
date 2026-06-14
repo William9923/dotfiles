@@ -6,7 +6,6 @@ zsh
 tmux
 neovim
 kitty
-atuin
 lazygit
 fzf
 ripgrep

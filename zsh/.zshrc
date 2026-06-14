@@ -42,14 +42,10 @@ source "$HOME/.cargo/env"
 export PATH="$PATH:$HOME/.cargo/bin"
 
 # Enable syntax highlighting
-source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+zsh-defer source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # Enable auto-suggestion
-source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-
-# Enable directory jumping
-source ~/zsh-z/zsh-z.plugin.zsh
-zstyle ':completion:*' menu select
+zsh-defer source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # Custom aliases - for daily purposes
 alias ls="ls -p -G"
@@ -206,3 +202,15 @@ op() {
     opencode "$@"
   fi
 }
+
+# yazi
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	command yazi "$@" --cwd-file="$tmp"
+	IFS= read -r -d '' cwd < "$tmp"
+	[ "$cwd" != "$PWD" ] && [ -d "$cwd" ] && builtin cd -- "$cwd"
+	command rm -f -- "$tmp"
+}
+
+# zoxide - directory jumping tools
+zsh-defer eval "$(zoxide init zsh)"
