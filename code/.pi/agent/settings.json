@@ -1,7 +1,21 @@
 {
   "lastChangelogVersion": "0.79.4",
-  "theme": "dark",
-  "defaultProvider": "opencode",
-  "defaultModel": "deepseek-v4-flash-free",
-  "defaultThinkingLevel": "high"
+  "defaultProvider": "github-copilot",
+  "defaultModel": "gpt-5.3-codex",
+  "defaultThinkingLevel": "high",
+  "theme": "kanagawa-dragon",
+  "themes": [
+    "~/.pi/agent/themes/kanagawa-dragon.json"
+  ],
+  "prompts": [
+    "~/.pi/agent/prompts"
+  ],
+  "shellCommandPrefix": "bind -m vi-insert 'jj' vi-movement-mode",
+  "editorPaddingX": 1,
+  "enabledModels": [
+    "opencode/deepseek-v4-flash-free",
+    "opencode/big-pickle",
+    "github-copilot/gpt-5.3-codex",
+    "github-copilot/gpt-5.4-mini"
+  ]
 }
