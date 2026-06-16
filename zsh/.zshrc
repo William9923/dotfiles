@@ -214,3 +214,6 @@ function y() {
 
 # zoxide - directory jumping tools
 zsh-defer eval "$(zoxide init zsh)"
+
+# Pi
+export PATH="/home/william-nobara/.local/share/mise/installs/node/22.22.3/bin:$PATH"
