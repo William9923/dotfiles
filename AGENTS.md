@@ -9,7 +9,7 @@ Main stack: Neovim (LazyVim), Zsh, Tmux, Kitty.
 
 ```text
 dotfiles/
-├── code/      # nvim, opencode, copilot
+├── code/      # nvim, opencode, copilot, pi agent config + pi-skills
 ├── git/       # git + lazygit
 ├── terminal/  # kitty + atuin
 ├── tmux/      # tmux
@@ -27,6 +27,7 @@ dotfiles/
 | Add secret/API key | `zsh/.zsh_secrets` |
 | Configure OpenCode | `code/.config/opencode/opencode.json` (uses `{env:VAR}` syntax) |
 | Add git alias | `git/.gitconfig` |
+| Update pi-skills | `code/.pi/agent/skills/pi-skills/` (tracked directly in dotfiles, no .git) |
 
 ## Secret rules
 
@@ -39,6 +40,19 @@ dotfiles/
 ```bash
 ./setup-secrets.sh
 stow code git terminal tmux zsh
+```
+
+## Updating pi-skills
+
+pi-skills is tracked directly in the dotfiles repo (not a submodule). To update:
+
+```bash
+# Refresh from upstream, then commit the changes
+git remote add upstream git@github.com:badlogic/pi-skills  # once
+git fetch upstream
+git checkout origin/master -- code/.pi/agent/skills/pi-skills
+git add code/.pi/agent/skills/pi-skills
+git commit -m "chore: update pi-skills"
 ```
 
 ## Anti-patterns
