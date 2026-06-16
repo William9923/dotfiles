@@ -5,6 +5,7 @@ zsh/.zsh_secrets
 git/.gitconfig.local
 code/.config/github-copilot/apps.json
 code/.config/opencode/opencode.json
+code/.pi/agent/auth.json
 
 # Other files
 .env
