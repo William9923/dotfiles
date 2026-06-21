@@ -217,3 +217,26 @@ zsh-defer eval "$(zoxide init zsh)"
 
 # Pi
 export PATH="/home/william-nobara/.local/share/mise/installs/node/22.22.3/bin:$PATH"
+
+# Ask Pi to diagnose the last failed command
+why() {
+    local last_status=$?
+    local last_cmd
+
+    last_cmd="$(fc -ln -1 | sed 's/^[[:space:]]*//')"
+
+    # If the last command was 'why' itself, look back one more step
+    [[ "$last_cmd" == why* ]] && last_cmd="$(fc -ln -2 -2 | sed 's/^[[:space:]]*//')"
+
+    echo "Task: Diagnose why this command failed or analyze its behavior."
+    echo "--------------------------------------------------"
+    echo "Command run: $last_cmd"
+    echo "Exit Code:   $last_status"
+    echo "--------------------------------------------------"
+    echo "Please explain why it might not be working and suggest a fix."
+    echo ""
+    echo "## Additional context"
+    echo ""
+    echo "My shell is Zsh."
+    echo "My OS is Linux."
+}
