@@ -1,8 +1,8 @@
 {
-  "lastChangelogVersion": "0.79.9",
-  "defaultProvider": "opencode",
-  "defaultModel": "big-pickle",
-  "defaultThinkingLevel": "high",
+  "lastChangelogVersion": "0.80.2",
+  "defaultProvider": "opencode-go",
+  "defaultModel": "kimi-k2.7-code",
+  "defaultThinkingLevel": "medium",
   "theme": "kanagawa-dragon",
   "themes": [
     "~/.pi/agent/themes/kanagawa-dragon.json"
@@ -13,12 +13,13 @@
   "shellCommandPrefix": "bind -m vi-insert 'jj' vi-movement-mode",
   "editorPaddingX": 1,
   "enabledModels": [
-    "opencode/deepseek-v4-flash-free",
-    "opencode/big-pickle",
-    "github-copilot/gpt-5.3-codex",
-    "github-copilot/gpt-5.4-mini"
+    "opencode-go/deepseek-v4-flash",
+    "opencode-go/kimi-k2.7-code",
+    "opencode-go/glm-5.2",
+    "github-copilot/gpt-5.3-codex"
   ],
   "packages": [
     "git:github.com/DietrichGebert/ponytail"
-  ]
+  ],
+  "hideThinkingBlock": false
 }
