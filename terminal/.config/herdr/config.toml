@@ -1,0 +1,54 @@
+[theme]
+name = "vesper"
+auto_switch = false
+
+[ui]
+status_indicators = "dots"
+show_agent_labels_on_pane_borders = false
+copy_on_select = true
+hide_tab_bar_when_single_tab = true
+sidebar_start_collapsed = true
+sidebar_collapsed_mode = "compact"
+pane_scrollbars = false
+pane_gaps = false
+
+# Match tmux: tabs/status row at the bottom.
+tab_bar_position = "bottom"
+tab_bar_right = [
+  { type = "datetime", format = "%H:%M" },
+]
+tab_bar_right_separator = " "
+
+agent_panel_sort = "spaces"
+[ui.toast]
+delivery = "herdr"
+
+[keys]
+# Keep tmux muscle-memory for splits
+split_horizontal = 'prefix+"'
+split_vertical = 'prefix+%'
+
+# Fast tab navigation
+previous_tab = "shift+left"
+next_tab = "shift+right"
+
+# Fast workspace (space) navigation
+previous_workspace = "alt+h"
+next_workspace = "alt+l"
+switch_workspace = "prefix+shift+1..9"
+
+# Agent navigation
+focus_agent = "prefix+alt+1..9"
+
+# Useful utility keys
+edit_scrollback = "prefix+e"
+zoom = ""
+toggle_sidebar = "prefix+z"
+
+# Quick rename for the current pane's agent
+[[keys.command]]
+key = "prefix+shift+a"
+type = "popup"
+command = "herdr-rename-agent"
+width = "60%"
+height = "40%"

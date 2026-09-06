@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ "${HERDR_ENV:-}" != "1" ]]; then
+  echo "Not running inside Herdr (HERDR_ENV!=1)." >&2
+  exit 1
+fi
+
+pane_json="$(herdr pane current --current)"
+pane_id="$(jq -r '.result.pane.pane_id // empty' <<<"$pane_json")"
+current_agent="$(jq -r '.result.pane.agent // empty' <<<"$pane_json")"
+
+if [[ -z "$pane_id" ]]; then
+  echo "Could not resolve current pane." >&2
+  exit 1
+fi
+
+echo "Pane: $pane_id"
+if [[ -n "$current_agent" ]]; then
+  echo "Current agent name: $current_agent"
+else
+  echo "No agent detected in this pane yet."
+fi
+
+echo ""
+read -r -p "New agent name (blank=cancel, -=clear): " name
+
+if [[ -z "$name" ]]; then
+  echo "Canceled."
+  exit 0
+fi
+
+if [[ "$name" == "-" ]]; then
+  herdr agent rename "$pane_id" --clear
+  echo "Cleared agent name."
+else
+  herdr agent rename "$pane_id" "$name"
+  echo "Renamed agent to: $name"
+fi
