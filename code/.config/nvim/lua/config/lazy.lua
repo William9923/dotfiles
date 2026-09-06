@@ -89,4 +89,8 @@ require("lazy").setup({
 -- Personal neovim plugin / extension
 -- Dicipline: Don't repeat same key too much
 local dicipline = require("personal.dicipline")
-dicipline.norepeat() -- NOTE: prevent / train vim user to not apply continuous key repeat
+dicipline.norepeat()
+
+-- AI Notes: to annotate code directly into a file with exact location
+local ai_notes = require("personal.ai_notes")
+ai_notes.setup()

@@ -100,6 +100,45 @@ obsidian delete path="Old Note.md"             # Trash
 obsidian delete path="Old Note.md" permanent   # Skip trash
 ```
 
+## Architecture Research Timeline
+
+Research notes (architecture analysis, investigations, codebase onboarding) go into the `Architecture` folder organized by ISO week.
+
+### Folder structure
+
+Each note lives under the ISO week it was created:
+
+```
+Architecture/
+├── 2026-W22/
+│   └── meseeks-pipelines.md
+├── 2026-W23/
+│   ├── Dotfiles Analysis.md
+│   └── route-store-ui-build.md
+├── 2026-W24/
+│   └── ...
+```
+
+### Creating a new research note
+
+1. Determine current ISO week: `date '+%Y-W%V'`
+2. Ensure the week folder exists under `Architecture/`
+3. Create the note inside it:
+
+```bash
+week=$(date '+%Y-W%V')
+mkdir -p "Architecture/$week"
+obsidian create path="Architecture/$week/My Research.md" content="# My Research\n\n**Date:** $(date '+%Y-%m-%d')\n"
+```
+
+### Linking between Architecture notes
+
+Use wiki-style links with the full path from vault root:
+
+```
+[[Architecture/2026-W24/mermaid-ascii]]
+```
+
 ## Notes
 
 - Use `path=` for exact file paths (relative to vault root), `file=` for wiki-style name lookup
