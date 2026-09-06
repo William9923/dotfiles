@@ -1,8 +1,20 @@
 [theme]
-name = "vesper"
+name = "kanagawa"
 auto_switch = false
 
+[theme.custom]
+sidebar_bg = "#0d0c0c"
+active_row_bg = "#181616"
+selection_bg = "#1d1c1a"
+surface_dim = "#0d0c0c"
+mauve = "#a292a3"
+green = "#8a9a7b"
+yellow = "#c4b28a"
+red = "#c4746e"
+peach = "#b6927b"
+
 [ui]
+accent = "#8ba4b0"
 status_indicators = "dots"
 show_agent_labels_on_pane_borders = false
 copy_on_select = true
@@ -11,6 +23,7 @@ sidebar_start_collapsed = true
 sidebar_collapsed_mode = "compact"
 pane_scrollbars = false
 pane_gaps = false
+pane_outer_borders = false
 
 # Match tmux: tabs/status row at the bottom.
 tab_bar_position = "bottom"
